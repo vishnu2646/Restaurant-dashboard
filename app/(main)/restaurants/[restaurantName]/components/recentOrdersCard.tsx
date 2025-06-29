@@ -1,17 +1,23 @@
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
-import { MoreVertical } from 'lucide-react'
-import Link from 'next/link'
-import React from 'react'
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import { IRestaurant } from '@/types/types';
+import { MoreVertical } from 'lucide-react';
+import Link from 'next/link';
+import React from 'react';
 
-const RecentOrdersCard: React.FC = () => {
+interface RecentOrdersProps {
+    restaurant: IRestaurant;
+}
+
+const RecentOrdersCard: React.FC<RecentOrdersProps> = ({restaurant}: RecentOrdersProps) => {
+    console.log(restaurant, "recentOrdersCard");
     return (
         <div className='flex-1 min-h-full'>
             <div className='flex items-center justify-between pb-2'>
                 <h1 className='font-bold text-medium'>Recent Orders</h1>
-                <Link href='/restaurants/Chole New Yorkban/recent-orders'>
+                <Link href={`/restaurants/${restaurant.name}/recent-orders?restaurantId=${restaurant.id}`}>
                     <Button variant="link">
                         View All
                     </Button>

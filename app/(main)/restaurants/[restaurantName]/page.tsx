@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChevronDown, HandPlatter, ReceiptIndianRupee, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,6 +11,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import RecentOrdersCard from './components/recentOrdersCard';
 import Employees from './components/employees';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { getRestaurantByName } from '@/actions/restaurant';
+import { IRestaurant } from '@/types/types';
 
 const chartData = [
     { timing: "8.00 AM", money: 80 },
@@ -28,12 +31,43 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const Page: React.FC = () => {
+
+    const params = useParams();
+
+    const { restaurantName } = params;
+
+    const [restaurant, setRestaurant] = useState<IRestaurant>();
+
+    const [error, setError] = useState<string>();
+
+    const fetchRestaurant = async () => {
+        const restaurant = restaurantName.toString().replaceAll('%20', ' ')
+        const data = await getRestaurantByName(restaurant as string);
+        if(data && data.succeess) {
+            setRestaurant(data.succeess as IRestaurant);
+        } if(data && data.error) {
+            setError(data.error)
+        }
+    };
+
+    if(error)  {
+        return (
+            <>
+                <h1>No Restaurant data to display.</h1>
+            </>
+        )
+    }
+
+    useEffect(() => {
+        fetchRestaurant();
+    }, []);
+
     return (
         <section>
             <div className="flex items-center justify-between flex-wrap lg:flex-nowrap mb-5">
-                <h1 className='font-bold text-2xl'>Chole New Yorkban</h1>
+                <h1 className='font-bold text-2xl'>{restaurant?.name}</h1>
                 <div className='flex items-center gap-5'>
-                    <Link href={`/restaurants/Chole New Yorkban/menus`}>
+                    <Link href={`/restaurants/${restaurant?.name}/menus?restaurantId=${restaurant?.id}`}>
                         <Button className="md:mt-0 mt-5">
                             <HandPlatter width={20} height={20}  />
                             Restaurant Menus
@@ -223,8 +257,8 @@ const Page: React.FC = () => {
                 </div>
             </main>
             <main className='flex flex-col sm:flex-row items-start justify-between gap-4'>
-                <RecentOrdersCard />
-                <Employees />
+                {restaurant && <RecentOrdersCard restaurant={restaurant} />}
+                {restaurant && <Employees restaurant={restaurant} />}
             </main>
         </section>
     )

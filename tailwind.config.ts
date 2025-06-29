@@ -11,6 +11,7 @@ const config: Config = {
     	extend: {
     		colors: {
     			background: 'var(--background)',
+				errorBg: 'var(--error-bg)',
     			foreground: 'var(--foreground)',
     			card: {
     				DEFAULT: 'var(--card)',

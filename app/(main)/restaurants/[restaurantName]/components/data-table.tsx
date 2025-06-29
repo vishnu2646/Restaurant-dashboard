@@ -5,7 +5,7 @@ import {
     flexRender,
     getCoreRowModel,
     useReactTable,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
 import {
     Table,
@@ -14,10 +14,10 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import DetailContent from "./detail-content"
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import DetailContent from "./detail-content";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]

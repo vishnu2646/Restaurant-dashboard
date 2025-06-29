@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { IEmploye } from '@/types/types'
+import Link from 'next/link'
 import React from 'react'
 
 interface IEmployeProps {
@@ -8,7 +9,7 @@ interface IEmployeProps {
 
 const EmployeeCard: React.FC<IEmployeProps> = ({emp}) => {
     return (
-        <>
+        <Link href={`/account?emp=${emp.id}`}>
             <Card className='shadow-none p-0'>
                 <CardHeader>
                     <img alt='employe' src={emp.image} className='w-full rounded h-[100px]'/>
@@ -20,7 +21,7 @@ const EmployeeCard: React.FC<IEmployeProps> = ({emp}) => {
                     </div>
                 </CardContent>
             </Card>
-        </>
+        </Link>
     )
 }
 

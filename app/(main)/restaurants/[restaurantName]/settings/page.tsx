@@ -106,10 +106,10 @@ const Page = () => {
                                                 <Switch checked={timing.checked}/>
                                             </td>
                                             <td className='px-4 py-2'>
-                                                <Input type='time' className='pl-0 w-[50px]' />
+                                                <input type='time' className='pl-0 w-[80px]' />
                                             </td>
                                             <td className='px-4 py-2'>
-                                                <Input type='time' className='pl-0 w-[50px]' />
+                                                <input type='time' className='pl-0 w-[80px]' />
                                             </td>
                                         </tr>
                                     ))}

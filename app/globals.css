@@ -61,6 +61,7 @@ body {
         --sidebar-border: #E5E7EB;
         --sidebar-ring: #fd7658;
         --inputDark: #aaaaaa;
+        --error-bg: #fffff2;
     }
     .dark {
         --background: #020817;
@@ -98,6 +99,7 @@ body {
         --sidebar-border: #27272A;
         --sidebar-ring: #fd7658;
         --inputDark: #aaaaaa;
+        --error-bg: #fffff2;
     }
 }
 

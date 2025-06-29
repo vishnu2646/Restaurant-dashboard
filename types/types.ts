@@ -1,20 +1,23 @@
 export interface IRestaurant {
     id: number;
     image: string;
-    restaurantName: string;
-    rating: number;
+    name: string;
+    rating: string;
     address: string;
-    employeesCount: number;
+    empCount: number;
 }
 
 export interface IMenuProps {
+    id: string;
     image: string;
-    title: string;
+    name: string;
     description: string;
     price: string;
+    selected?: boolean;
 }
 
 export interface IEmploye {
+    id: string;
     image: string;
     name: string;
     position: string;

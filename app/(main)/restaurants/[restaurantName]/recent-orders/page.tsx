@@ -1,10 +1,10 @@
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { ArrowUpDownIcon, ListFilter, Search } from 'lucide-react'
-import React from 'react'
+import React from 'react';
+import { ArrowUpDownIcon, ListFilter, Search } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { orders } from '@/data/data';
 import { DataTable } from '../components/data-table';
 import { columns } from './columns';
-import { orders } from '@/data/data';
 
 const Page = () => {
     return (

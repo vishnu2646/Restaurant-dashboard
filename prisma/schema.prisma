@@ -1,0 +1,164 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+model Account {
+    id                 String  @id @default(cuid())
+    userId             String  @map("user_id")
+    type               String
+    provider           String
+    providerAccountId  String  @map("provider_account_id")
+    refresh_token      String? @db.Text
+    access_token       String? @db.Text
+    expires_at         Int?
+    token_type         String?
+    scope              String?
+    id_token           String? @db.Text
+    session_state      String?
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+    @@map("accounts")
+}
+
+model TwoFactorToken {
+    id      String    @id @default(uuid())
+    email   String
+    token   String    @unique
+    expires DateTime
+
+    @@unique([email, token])
+}
+
+model TwoFactorConfirmation {
+    id     String @id @default(uuid())
+    userId String
+    user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([userId])
+}
+
+enum UserRole {
+    ADMIN
+    USER
+}
+
+model User {
+    id                     String                   @id @default(uuid())
+    name                   String?
+    email                  String?                  @unique
+    emailVerified          DateTime?                @map("email_verified")
+    image                  String?
+    phone                  String?
+    password               String?
+    role                   UserRole                 @default(USER)
+    accounts               Account[]
+    isTwoFactorEnabled     Boolean                  @default(false)
+    twoFactorConfirmation  TwoFactorConfirmation?
+
+    orders                 Order[]                  @relation("UserOrders")
+
+    @@map("users")
+}
+
+model VerificationToken {
+    id      String @id @default(uuid())
+    email   String
+    token   String @unique
+    expires DateTime
+
+    @@unique([email, token])
+}
+
+model passwordResetToken {
+    id      String    @id @default(uuid())
+    email   String
+    token   String    @unique
+    expires DateTime
+
+    @@unique([email, token])
+}
+
+model Restaurant {
+    id          String     @id @default(uuid())
+    name        String     @unique
+    rating      String
+    address     String
+    empCount    Int
+    image       String
+    menus       Menu[]     @relation("RestaurantMenus")
+    employees   Employee[] @relation("RestaurantEmployees")
+    orders      Order[]    @relation("RestaurantOrders")
+}
+
+model Menu {
+    id           String     @id @default(uuid())
+    name         String
+    description  String     @db.Text
+    price        String
+    image        String
+    restaurantId String
+    restaurant   Restaurant @relation("RestaurantMenus", fields: [restaurantId], references: [id])
+}
+
+model MenuItem {
+    id          String      @id @default(uuid())
+    name        String
+    price       String
+    description String      @db.Text
+    image       String
+    orderItems  OrderItem[]
+}
+
+model Employee {
+    id           String     @id @default(uuid())
+    name         String
+    position     String
+    image        String
+    restaurantId String
+    restaurant   Restaurant @relation("RestaurantEmployees", fields: [restaurantId], references: [id])
+}
+
+enum OrderStatus {
+    NEW
+    ACCEPTED
+    PREPARING
+    COMPLETED
+    CANCELED
+}
+
+model Order {
+    id              String      @id @default(uuid())
+    userId          String
+    restaurantId    String
+    totalAmount     Decimal
+    customerName    String
+    customerContact String
+    status          OrderStatus @default(NEW)
+    createdAt       DateTime    @default(now())
+
+    user            User        @relation("UserOrders", fields: [userId], references: [id], onDelete: Cascade)
+    restaurant      Restaurant  @relation("RestaurantOrders", fields: [restaurantId], references: [id], onDelete: Cascade)
+    orderItems      OrderItem[]
+
+    @@map("orders")
+}
+
+model OrderItem {
+    id         String   @id @default(uuid())
+    orderId    String
+    menuItemId String
+    quantity   Int
+    price      Decimal
+
+    order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+    menuItem   MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+
+    @@map("order_items")
+}
